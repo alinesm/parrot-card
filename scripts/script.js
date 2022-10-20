@@ -62,7 +62,7 @@ cards.forEach((card) => {
     if (!card.classList.contains("matched")) {
       card.classList.add("flipped");
       if (!firstCard) {
-        movesCount += 1;4
+        movesCount += 1
         firstCard = card;
         firstCardValue = card.getAttribute("data-card-value");
       } else {
@@ -73,6 +73,7 @@ cards.forEach((card) => {
           firstCard.classList.add("matched");
           secondCard.classList.add("matched");
           firstCard = false;
+          secondCard= false //tentar
           winCount += 1;
           if (winCount == Math.floor(arr.length)) {
             setTimeout(() => gameOver (), 200) 

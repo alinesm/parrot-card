@@ -26,21 +26,19 @@ body{
   width: 117px;
   height: 146px;
   position: relative;
-  transform-style: preserve-3d;
-  transition: transform .5s;
-  background: #A7E9AF;
-  border: 1px solid #99CEA8;
-  border-radius: 5px;
   margin-right: 34px;
   margin-bottom: 34px;
-  cursor: pointer;
-
+  cursor: pointer;  
 }
 
 .card-back, .card-front{
+  background: #A7E9AF;
+  border: 1px solid #99CEA8;
+  border-radius: 5px;
   width: 100%;
   height: 100%;
-  transition: transform 0.7s ease-out;
+  transition: all .7s;
+  transform-style: preserve-3d;
   position: absolute;
   display: flex;
   justify-content: center;
@@ -50,7 +48,7 @@ body{
 
 .card-back{
   background: #A7E9AF;
-  display: none;
+  transform: rotateY(180deg);
 }
 
 img {
@@ -60,9 +58,8 @@ img {
 
 .card-container.flipped .card-front {
   transform: rotateY(180deg);
-  display: none;
 }
+
 .card-container.flipped .card-back {
   transform: rotateY(0deg);
-  display: flex;
 }
