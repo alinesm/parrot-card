@@ -1,97 +1,115 @@
-let firstCardValue
-let secondCardValue
-let cards;
-let interval;
-let cardValues
-let firstCard = false
-let secondCard = false
-let movesCount = 0
-let winCount = 0
+let movesCount;
 
-const items = [
-  {name: "bobross", gif: "/assets/bobrossparrot.gif" },
-  {name: "explody", gif: "/assets/explodyparrot.gif" },
-  {name: "fiesta", gif: "/assets/fiestaparrot.gif" },
-  {name: "metal", gif: "/assets/metalparrot.gif" },
-  {name: "revertit", gif: "/assets/revertitparrot.gif" },
-  {name: "triplets", gif: "/assets/tripletsparrot.gif" },
-  {name: "unicorn", gif: "/assets/unicornparrot.gif" }
-]
+initialize()
 
-let size = window.prompt('Enter with the number of card. it should be an even number between 4 and 14')
+function initialize() { 
+  let firstCardValue
+  let secondCardValue
+  let cards;
+  let firstCard = false
+  let secondCard = false 
+  let matchedCount = 0
+  movesCount = 0
 
-while( Number(size) % 2 !== 0  ||  Number(size) < 4 || Number(size) > 14 ){
-  size = window.prompt('Enter with the number of card. it should be an even number between 4 and 14')
-}
+  let items = [
+    {name: "bobross", gif: "/assets/bobrossparrot.gif" },
+    {name: "explody", gif: "/assets/explodyparrot.gif" },
+    {name: "fiesta", gif: "/assets/fiestaparrot.gif" },
+    {name: "metal", gif: "/assets/metalparrot.gif" },
+    {name: "revertit", gif: "/assets/revertitparrot.gif" },
+    {name: "triplets", gif: "/assets/tripletsparrot.gif" },
+    {name: "unicorn", gif: "/assets/unicornparrot.gif" }
+  ]
 
-function suffle() { 
-	return Math.random() - 0.5; 
-}
+  let size = window.prompt('Enter with the number of card. it should be an even number between 4 and 14')
 
-items.sort(suffle)
+  while( Number(size) % 2 !== 0  ||  Number(size) < 4 || Number(size) > 14 ){
+    size = window.prompt('Enter with the number of card. it should be an even number between 4 and 14')
+  }
 
-const gameBoard = document.querySelector(".gameBoard")
-gameBoard.innerHTML = ""
+  function suffle() { 
+    return Math.random() - 0.5; 
+  }
 
-let arr = []
-for (let i = 0; i < size /2; i++) {
-  arr.push(items[i])
-  gameBoard.innerHTML += `
-   <div class="card-container" data-card-value="${items[i].name}">
-      <div class="card-front"><img src="${"/assets/back.png"}" /></div>
-      <div class="card-back">
-      <img src="${items[i].gif}" class="image" /></div>
-   </div>
-   `;
-}
+  items.sort(suffle)
 
-arr.sort(suffle)
-for (let i = 0; i < size /2; i++) {
-  gameBoard.innerHTML += `
-   <div class="card-container" data-card-value="${arr[i].name}">
-      <div class="card-front"><img src="${"/assets/back.png"}" /></div>
-      <div class="card-back">
-      <img src="${arr[i].gif}" class="image" /></div>
-   </div>
-   `;
-}
+  const gameBoard = document.querySelector(".gameBoard")
+  gameBoard.innerHTML = ""
 
-cards = document.querySelectorAll(".card-container");
-cards.forEach((card) => {
-  card.addEventListener("click", () => {
-    if (!card.classList.contains("matched")) {
-      card.classList.add("flipped");
-      if (!firstCard) {
-        movesCount += 1
-        firstCard = card;
-        firstCardValue = card.getAttribute("data-card-value");
-      } else {
-        movesCount += 1;
-        secondCard = card;
-        let secondCardValue = card.getAttribute("data-card-value");
-        if (firstCardValue === secondCardValue) {
-          firstCard.classList.add("matched");
-          secondCard.classList.add("matched");
-          firstCard = false;
-          secondCard= false //tentar
-          winCount += 1;
-          if (winCount == Math.floor(arr.length)) {
-            setTimeout(() => gameOver (), 200) 
-          }
+  let arr = []
+  for (let i = 0; i < size/2; i++) {
+    arr.push(items[i])
+    gameBoard.innerHTML += `
+    <div class="card-container" data-card-value="${items[i].name}">
+        <div class="card-front"><img src="${"/assets/back.png"}" /></div>
+        <div class="card-back">
+        <img src="${items[i].gif}" class="image" /></div>
+    </div>
+    `;
+  }
+
+  arr.sort(suffle)
+  for (let i = 0; i < size/2; i++) {
+    gameBoard.innerHTML += `
+    <div class="card-container" data-card-value="${arr[i].name}">
+        <div class="card-front"><img src="${"/assets/back.png"}" /></div>
+        <div class="card-back">
+        <img src="${arr[i].gif}" class="image" /></div>
+    </div>
+    `;
+  }
+
+  cards = document.querySelectorAll(".card-container");
+  cards.forEach((card) => {
+    card.addEventListener("click", () => {
+      if (!card.classList.contains("matched")) {
+        card.classList.add("flipped");
+        if (!firstCard) {
+          movesCount += 1
+          firstCard = card;
+          firstCardValue = card.getAttribute("data-card-value");
         } else {
-          let delay = setTimeout(() => {
-            firstCard.classList.remove("flipped");
-            secondCard.classList.remove("flipped");
+          movesCount += 1;
+          secondCard = card;
+          secondCardValue = card.getAttribute("data-card-value");
+          if (firstCardValue === secondCardValue) {
+            firstCard.classList.add("matched");
+            secondCard.classList.add("matched");
             firstCard = false;
-            secondCard = false;
-          }, 1000);
+            secondCard= false;
+            matchedCount += 1;
+            if (matchedCount === arr.length) {
+              setTimeout(() => gameOver (), 300) 
+            }
+          } else {
+            let delay = setTimeout(() => {
+              firstCard.classList.remove("flipped");
+              secondCard.classList.remove("flipped");
+              firstCard = false;
+              secondCard = false;
+            }, 1000);
+          }
         }
       }
-    }
+    });
   });
-});
+}
 
 
+let restart;
 function gameOver () {
   alert(`Você ganhou em ${movesCount} jogadas!"`)
+
+  restart = prompt("gostaria de jogar novamente? Digite sim ou não") 
+  
+  while(restart !== "sim" || restart !== "não") {    
+    if(restart === "sim") {
+      return initialize()      
+    } else if (restart === "não") {
+      return 
+    } else {
+      restart = prompt("gostaria de jogar novamente? Digite sim ou não")
+    }
+  }
 }
+
