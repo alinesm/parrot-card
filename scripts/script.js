@@ -1,15 +1,15 @@
 let movesCount;
 
-initialize()
+initialize();
 
 function initialize() { 
-  let firstCardValue
-  let secondCardValue
+  let firstCardValue;
+  let secondCardValue;
   let cards;
-  let firstCard = false
-  let secondCard = false 
-  let matchedCount = 0
-  movesCount = 0
+  let firstCard = null;
+  let secondCard = null;
+  let matchedCount = 0;
+  movesCount = 0;
 
   let items = [
     {name: "bobross", gif: "/assets/bobrossparrot.gif" },
@@ -19,11 +19,11 @@ function initialize() {
     {name: "revertit", gif: "/assets/revertitparrot.gif" },
     {name: "triplets", gif: "/assets/tripletsparrot.gif" },
     {name: "unicorn", gif: "/assets/unicornparrot.gif" }
-  ]
+  ];
 
-  let size = window.prompt('Enter with the number of card. it should be an even number between 4 and 14')
+  let size = window.prompt('Enter with the number of card. it should be an even number between 4 and 14');
 
-  while( Number(size) % 2 !== 0  ||  Number(size) < 4 || Number(size) > 14 ){
+  while( Number(size) % 2 !== 0  ||  Number(size) < 4 || Number(size) > 14 ) {
     size = window.prompt('Enter with the number of card. it should be an even number between 4 and 14')
   }
 
@@ -31,30 +31,36 @@ function initialize() {
     return Math.random() - 0.5; 
   }
 
-  items.sort(suffle)
+  items.sort(suffle);
 
-  const gameBoard = document.querySelector(".gameBoard")
-  gameBoard.innerHTML = ""
+  let gameBoard = document.querySelector(".gameBoard");
+  gameBoard.innerHTML = "";
 
-  let arr = []
+  let arr = [];
   for (let i = 0; i < size/2; i++) {
-    arr.push(items[i])
+    arr.push(items[i]);
     gameBoard.innerHTML += `
     <div class="card-container" data-card-value="${items[i].name}">
-        <div class="card-front"><img src="${"/assets/back.png"}" /></div>
+        <div class="card-front">
+          <img src="${"/assets/back.png"}" />
+        </div>
         <div class="card-back">
-        <img src="${items[i].gif}" class="image" /></div>
+          <img src="${items[i].gif}" class="image" />
+        </div>
     </div>
     `;
   }
 
-  arr.sort(suffle)
+  arr.sort(suffle);
   for (let i = 0; i < size/2; i++) {
     gameBoard.innerHTML += `
     <div class="card-container" data-card-value="${arr[i].name}">
-        <div class="card-front"><img src="${"/assets/back.png"}" /></div>
+        <div class="card-front">
+          <img src="${"/assets/back.png"}" />
+        </div>
         <div class="card-back">
-        <img src="${arr[i].gif}" class="image" /></div>
+          <img src="${arr[i].gif}" class="image" />
+        </div>
     </div>
     `;
   }
@@ -65,28 +71,31 @@ function initialize() {
       if (!card.classList.contains("matched")) {
         card.classList.add("flipped");
         if (!firstCard) {
-          movesCount += 1
+          movesCount += 1;
           firstCard = card;
           firstCardValue = card.getAttribute("data-card-value");
         } else {
           movesCount += 1;
-          secondCard = card;
-          secondCardValue = card.getAttribute("data-card-value");
+          secondCard = card; 
+          gameBoard.classList.add("block");       
+          secondCardValue = card.getAttribute("data-card-value");          
           if (firstCardValue === secondCardValue) {
             firstCard.classList.add("matched");
             secondCard.classList.add("matched");
-            firstCard = false;
-            secondCard= false;
+            firstCard = null;
+            secondCard= null;
+            gameBoard.classList.remove("block"); 
             matchedCount += 1;
             if (matchedCount === arr.length) {
-              setTimeout(() => gameOver (), 300) 
+              setTimeout(() => gameOver (), 300); 
             }
           } else {
-            let delay = setTimeout(() => {
-              firstCard.classList.remove("flipped");
-              secondCard.classList.remove("flipped");
-              firstCard = false;
-              secondCard = false;
+              setTimeout(() => {
+                firstCard.classList.remove("flipped");
+                secondCard.classList.remove("flipped");
+                firstCard = null;
+                secondCard = null;       
+                gameBoard.classList.remove("block");
             }, 1000);
           }
         }
@@ -98,17 +107,17 @@ function initialize() {
 
 let restart;
 function gameOver () {
-  alert(`Você ganhou em ${movesCount} jogadas!"`)
+  alert(`Você ganhou em ${movesCount} jogadas!"`);
 
-  restart = prompt("gostaria de jogar novamente? Digite sim ou não") 
+  restart = prompt("gostaria de jogar novamente? Digite sim ou não"); 
   
   while(restart !== "sim" || restart !== "não") {    
     if(restart === "sim") {
-      return initialize()      
+      return initialize();     
     } else if (restart === "não") {
-      return 
+      return;
     } else {
-      restart = prompt("gostaria de jogar novamente? Digite sim ou não")
+      restart = prompt("gostaria de jogar novamente? Digite sim ou não");
     }
   }
 }

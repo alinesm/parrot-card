@@ -63,3 +63,11 @@ img {
 .card-container.flipped .card-back {
   transform: rotateY(0deg);
 }
+
+.block {
+  cursor: not-allowed;
+}
+
+.block * {
+  pointer-events: none; 
+}
