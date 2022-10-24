@@ -36,30 +36,22 @@ function initialize() {
   let gameBoard = document.querySelector(".gameBoard");
   gameBoard.innerHTML = "";
 
-  let arr = [];
+  let  uniqueGifs = [];
   for (let i = 0; i < size/2; i++) {
-    arr.push(items[i]);
-    gameBoard.innerHTML += `
-    <div class="card-container" data-card-value="${items[i].name}">
-        <div class="card-front">
-          <img src="${"/assets/back.png"}" />
-        </div>
-        <div class="card-back">
-          <img src="${items[i].gif}" class="image" />
-        </div>
-    </div>
-    `;
+    uniqueGifs.push(items[i]);
   }
 
-  arr.sort(suffle);
-  for (let i = 0; i < size/2; i++) {
+  let duplicatedGifs = uniqueGifs.flatMap(i => [i,i])
+  let duplicatedSuffledGifs = duplicatedGifs.sort(suffle);
+
+ for (let i = 0; i < size; i++) {
     gameBoard.innerHTML += `
-    <div class="card-container" data-card-value="${arr[i].name}">
+    <div class="card-container" data-card-value="${duplicatedSuffledGifs[i].name}">
         <div class="card-front">
           <img src="${"/assets/back.png"}" />
         </div>
         <div class="card-back">
-          <img src="${arr[i].gif}" class="image" />
+          <img src="${duplicatedSuffledGifs[i].gif}" class="image" />
         </div>
     </div>
     `;
@@ -86,7 +78,7 @@ function initialize() {
             secondCard= null;
             gameBoard.classList.remove("block"); 
             matchedCount += 1;
-            if (matchedCount === arr.length) {
+            if (matchedCount === uniqueGifs.length) {
               setTimeout(() => gameOver (), 300); 
             }
           } else {
